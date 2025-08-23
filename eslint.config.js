@@ -13,29 +13,32 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: './tsconfig.json'
+        project: './tsconfig.json',
       },
       globals: {
-        ...globals.node
-      }
+        ...globals.node,
+      },
     },
     plugins: {
       '@typescript-eslint': tseslint,
-      'playwright': playwrightPlugin
+      playwright: playwrightPlugin,
     },
     rules: {
       ...tseslint.configs.recommended.rules,
       ...playwrightPlugin.configs.recommended.rules,
-      '@typescript-eslint/explicit-function-return-type': ['error', {
-        allowExpressions: true,
-        allowTypedFunctionExpressions: true
-      }],
+      '@typescript-eslint/explicit-function-return-type': [
+        'error',
+        {
+          allowExpressions: true,
+          allowTypedFunctionExpressions: true,
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': 'error',
       'playwright/no-focused-test': 'error',
       'playwright/no-skipped-test': 'warn',
       'playwright/valid-expect': 'error',
-      'playwright/expect-expect': 'error'
-    }
-  }
+      'playwright/expect-expect': 'error',
+    },
+  },
 ];

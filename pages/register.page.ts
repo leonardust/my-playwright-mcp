@@ -26,7 +26,12 @@ export class RegisterPage extends BasePage {
     await this.navigate(this.url);
   }
 
-  async fillForm(data: { firstName: string; lastName: string; email: string; password: string }): Promise<void> {
+  async fillForm(data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }): Promise<void> {
     await this.firstName.fill(data.firstName);
     await this.lastName.fill(data.lastName);
     await this.email.fill(data.email);
