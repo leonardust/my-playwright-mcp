@@ -4,20 +4,19 @@ import { BasePage } from './base.page';
 
 export class WelcomePage extends BasePage {
   private readonly menu: Locator;
-  private static readonly _url = endpoints.welcome;
-
-  static get url(): string {
-    return this._url;
-  }
 
   constructor(page: Page) {
     super(page);
     this.menu = page.getByRole('heading', { level: 1 });
   }
 
+  get url(): string {
+    return endpoints.welcome;
+  }
+
   async navigateAndWaitFor(): Promise<void> {
-    await this.navigate(WelcomePage.url);
-    await this.waitForUrl(WelcomePage.url);
+    await this.navigate(this.url);
+    await this.waitForUrl(this.url);
   }
 
   getMenu(): Locator {

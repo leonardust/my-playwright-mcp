@@ -18,8 +18,12 @@ export class RegisterPage extends BasePage {
     this.submitButton = page.getByTestId('register-button');
   }
 
+  get url(): string {
+    return endpoints.register;
+  }
+
   async goto() {
-    await this.navigate(endpoints.register);
+    await this.navigate(this.url);
   }
 
   async fillForm(data: { firstName: string; lastName: string; email: string; password: string }) {

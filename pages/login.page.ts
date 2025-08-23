@@ -14,8 +14,12 @@ export class LoginPage extends BasePage {
     this.submitButton = page.getByRole('button', { name: 'LogIn' });
   }
 
+  get url(): string {
+    return endpoints.login;
+  }
+
   async goto() {
-    await this.navigate(endpoints.login);
+    await this.navigate(this.url);
   }
 
   async login(email: string, password: string) {

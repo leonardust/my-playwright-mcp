@@ -27,7 +27,7 @@ test.describe('Authentication Module', () => {
       await loginPage.login(testUser.email, testUser.password);
 
       // Assert
-      await welcomePage.waitForUrl(WelcomePage.url);
+      await welcomePage.waitForUrl(welcomePage.url);
       await expect(welcomePage.getMenu()).toContainText('GAD');
     });
   });
