@@ -1,13 +1,13 @@
 import { expect } from '@playwright/test';
 import { test } from '../fixtures/pages';
 import { generateTestUser } from '../utils/test-helpers';
-import { WelcomePage } from '../pages/welcome.page';
+import { ValidationConstants } from '../constants/validation';
 
 test.describe('Authentication Module', () => {
   test.describe.serial('Positive Authentication Flow', () => {
     const testUser = generateTestUser();
 
-    test('should successfully register a new user', async ({ page, registerPage }) => {
+    test('should successfully register a new user', async ({ registerPage }) => {
       // Arrange
 
       // Act
@@ -33,8 +33,6 @@ test.describe('Authentication Module', () => {
   });
 
   test.describe('Registration Validation Tests', () => {
-    const errorClass = /octavalidate-inp-error/;
-
     test('should validate empty form fields', async ({ registerPage }) => {
       // Arrange
 
@@ -43,10 +41,10 @@ test.describe('Authentication Module', () => {
       await registerPage.submit();
 
       // Assert
-      await expect(registerPage.getFirstNameInput()).toHaveClass(errorClass);
-      await expect(registerPage.getLastNameInput()).toHaveClass(errorClass);
-      await expect(registerPage.getEmailInput()).toHaveClass(errorClass);
-      await expect(registerPage.getPasswordInput()).toHaveClass(errorClass);
+      await expect(registerPage.getFirstNameInput()).toHaveClass(ValidationConstants.ERROR_CLASS);
+      await expect(registerPage.getLastNameInput()).toHaveClass(ValidationConstants.ERROR_CLASS);
+      await expect(registerPage.getEmailInput()).toHaveClass(ValidationConstants.ERROR_CLASS);
+      await expect(registerPage.getPasswordInput()).toHaveClass(ValidationConstants.ERROR_CLASS);
     });
 
     test('should validate invalid email format', async ({ registerPage }) => {
@@ -63,8 +61,11 @@ test.describe('Authentication Module', () => {
       await registerPage.registerUser(testData);
 
       // Assert
-      await expect(registerPage.getEmailInput()).toHaveAttribute('octavalidate', /EMAIL/);
-      await expect(registerPage.getEmailInput()).toHaveClass(errorClass);
+      await expect(registerPage.getEmailInput()).toHaveAttribute(
+        ValidationConstants.VALIDATION_ATTRIBUTE,
+        ValidationConstants.VALIDATION_RULES.EMAIL
+      );
+      await expect(registerPage.getEmailInput()).toHaveClass(ValidationConstants.ERROR_CLASS);
     });
 
     test('should validate non-alpha characters in name fields', async ({ registerPage }) => {
@@ -81,12 +82,15 @@ test.describe('Authentication Module', () => {
 
       // Assert
       await expect(registerPage.getFirstNameInput()).toHaveAttribute(
-        'octavalidate',
-        'R,ALPHA_ONLY'
+        ValidationConstants.VALIDATION_ATTRIBUTE,
+        ValidationConstants.VALIDATION_RULES.ALPHA_ONLY
       );
-      await expect(registerPage.getFirstNameInput()).toHaveClass(errorClass);
-      await expect(registerPage.getLastNameInput()).toHaveAttribute('octavalidate', 'R,SURNAME');
-      await expect(registerPage.getLastNameInput()).toHaveClass(errorClass);
+      await expect(registerPage.getFirstNameInput()).toHaveClass(ValidationConstants.ERROR_CLASS);
+      await expect(registerPage.getLastNameInput()).toHaveAttribute(
+        ValidationConstants.VALIDATION_ATTRIBUTE,
+        ValidationConstants.VALIDATION_RULES.SURNAME
+      );
+      await expect(registerPage.getLastNameInput()).toHaveClass(ValidationConstants.ERROR_CLASS);
     });
   });
 });
