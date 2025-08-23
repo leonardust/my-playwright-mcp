@@ -18,11 +18,11 @@ export class LoginPage extends BasePage {
     return endpoints.login;
   }
 
-  async goto() {
+  async goto(): Promise<void> {
     await this.navigate(this.url);
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<void> {
     await this.goto();
     await this.email.fill(email);
     await this.password.fill(password);

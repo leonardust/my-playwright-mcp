@@ -22,18 +22,18 @@ export class RegisterPage extends BasePage {
     return endpoints.register;
   }
 
-  async goto() {
+  async goto(): Promise<void> {
     await this.navigate(this.url);
   }
 
-  async fillForm(data: { firstName: string; lastName: string; email: string; password: string }) {
+  async fillForm(data: { firstName: string; lastName: string; email: string; password: string }): Promise<void> {
     await this.firstName.fill(data.firstName);
     await this.lastName.fill(data.lastName);
     await this.email.fill(data.email);
     await this.password.fill(data.password);
   }
 
-  async submit() {
+  async submit(): Promise<void> {
     await this.submitButton.click();
   }
 
@@ -42,7 +42,7 @@ export class RegisterPage extends BasePage {
     lastName: string;
     email: string;
     password: string;
-  }) {
+  }): Promise<void> {
     await this.goto();
     await this.fillForm(data);
     await this.submit();
