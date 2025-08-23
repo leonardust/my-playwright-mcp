@@ -1,34 +1,33 @@
-import { test, expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from '../fixtures/pages';
 import { generateTestUser } from '../utils/test-helpers';
-import { RegisterPage } from '../pages/register.page';
-import { LoginPage } from '../pages/login.page';
 import { WelcomePage } from '../pages/welcome.page';
 
 test.describe('Authentication Module', () => {
   test.describe.serial('Positive Authentication Flow', () => {
     const testUser = generateTestUser();
 
-    test('should successfully register a new user', async ({ page }) => {
+    test('should successfully register a new user', async ({ page, registerPage }) => {
       // Arrange
-      const registerPage = new RegisterPage(page);
 
       // Act
       await registerPage.registerUser(testUser);
 
       // Assert
-      await expect(page.getByRole('alert')).toHaveText('User created');
+      await expect(registerPage.getAlert()).toHaveText('User created');
     });
 
-    test('should successfully login with newly created user', async ({ page }) => {
+    test('should successfully login with newly created user', async ({
+      loginPage,
+      welcomePage,
+    }) => {
       // Arrange
-      const loginPage = new LoginPage(page);
-      const welcomePage = new WelcomePage(page);
 
       // Act
       await loginPage.login(testUser.email, testUser.password);
 
       // Assert
-      await expect(page).toHaveURL(WelcomePage.url);
+      await welcomePage.waitForUrl(WelcomePage.url);
       await expect(welcomePage.getMenu()).toContainText('GAD');
     });
   });
@@ -36,9 +35,8 @@ test.describe('Authentication Module', () => {
   test.describe('Registration Validation Tests', () => {
     const errorClass = /octavalidate-inp-error/;
 
-    test('should validate empty form fields', async ({ page }) => {
+    test('should validate empty form fields', async ({ registerPage }) => {
       // Arrange
-      const registerPage = new RegisterPage(page);
 
       // Act
       await registerPage.goto();
@@ -51,9 +49,8 @@ test.describe('Authentication Module', () => {
       await expect(registerPage.getPasswordInput()).toHaveClass(errorClass);
     });
 
-    test('should validate invalid email format', async ({ page }) => {
+    test('should validate invalid email format', async ({ registerPage }) => {
       // Arrange
-      const registerPage = new RegisterPage(page);
       const invalidEmail = 'invalid-email';
       const testData = {
         firstName: 'John',
@@ -70,9 +67,8 @@ test.describe('Authentication Module', () => {
       await expect(registerPage.getEmailInput()).toHaveClass(errorClass);
     });
 
-    test('should validate non-alpha characters in name fields', async ({ page }) => {
+    test('should validate non-alpha characters in name fields', async ({ registerPage }) => {
       // Arrange
-      const registerPage = new RegisterPage(page);
       const testData = {
         firstName: 'John123',
         lastName: 'Doe456',

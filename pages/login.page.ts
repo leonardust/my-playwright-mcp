@@ -1,21 +1,21 @@
 import { Locator, Page } from '@playwright/test';
 import { endpoints } from '../config/urls';
+import { BasePage } from './base.page';
 
-export class LoginPage {
-  private readonly page: Page;
+export class LoginPage extends BasePage {
   private readonly email: Locator;
   private readonly password: Locator;
   private readonly submitButton: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.email = page.getByRole('textbox', { name: 'Enter User Email' });
     this.password = page.getByRole('textbox', { name: 'Enter Password' });
     this.submitButton = page.getByRole('button', { name: 'LogIn' });
   }
 
   async goto() {
-    await this.page.goto(endpoints.login);
+    await this.navigate(endpoints.login);
   }
 
   async login(email: string, password: string) {

@@ -1,8 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 import { endpoints } from '../config/urls';
+import { BasePage } from './base.page';
 
-export class RegisterPage {
-  private readonly page: Page;
+export class RegisterPage extends BasePage {
   private readonly firstName: Locator;
   private readonly lastName: Locator;
   private readonly email: Locator;
@@ -10,7 +10,7 @@ export class RegisterPage {
   private readonly submitButton: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.firstName = page.getByTestId('firstname-input');
     this.lastName = page.getByTestId('lastname-input');
     this.email = page.getByTestId('email-input');
@@ -19,7 +19,7 @@ export class RegisterPage {
   }
 
   async goto() {
-    await this.page.goto(endpoints.register);
+    await this.navigate(endpoints.register);
   }
 
   async fillForm(data: { firstName: string; lastName: string; email: string; password: string }) {
