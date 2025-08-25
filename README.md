@@ -52,6 +52,18 @@ npm install
 npx playwright install
 ```
 
+### 4. Przygotowanie aplikacji testowej
+
+Projekt wymaga aplikacji testowej GAD GUI API Demo. Upewnij się, że jest ona sklonowana w katalogu nadrzędnym:
+
+```bash
+cd ..
+git clone https://github.com/jaktestowac/gad-gui-api-demo.git
+cd gad-gui-api-demo
+npm install
+cd ../playwright-mcp
+```
+
 ## 📁 Struktura projektu
 
 ```
@@ -106,20 +118,55 @@ Projekt jest skonfigurowany do uruchamiania testów na:
 
 ## 🏃‍♂️ Uruchomienie
 
+### Uruchomienie aplikacji testowej
+
+Przed uruchomieniem testów należy uruchomić aplikację testową GAD GUI API Demo:
+
+```bash
+# Uruchomienie aplikacji (w osobnym terminalu)
+npm run app:start
+
+# Lub uruchomienie aplikacji w tle (Windows)
+npm run app:start:background
+
+# Zatrzymanie aplikacji (Windows)
+npm run app:stop
+```
+
 ### Uruchomienie testów
 
 ```bash
-# Uruchomienie wszystkich testów
+# Uruchomienie wszystkich testów (aplikacja musi być uruchomiona)
 npm run test
 
 # Uruchomienie testów w trybie UI
-npx playwright test --ui
+npm run test:ui
+
+# Uruchomienie testów w trybie headed (widoczna przeglądarka)
+npm run test:headed
+
+# Uruchomienie testów w trybie debug
+npm run test:debug
 
 # Uruchomienie konkretnego testu
 npx playwright test tests/auth.spec.ts
 
 # Uruchomienie testów z raportem
 npx playwright test --reporter=html
+```
+
+### Workflow dla developera
+
+```bash
+# Terminal 1: Uruchom aplikację
+npm run app:start
+
+# Terminal 2: Uruchom testy
+npm run test:ui
+
+# Lub szybkie uruchomienie (eksperymentalne)
+npm run dev        # uruchom app + testy
+npm run dev:ui     # uruchom app + testy UI
 ```
 
 ### Tryb deweloperski
@@ -140,13 +187,21 @@ npm run lint:fix
 
 ## 📜 Skrypty npm
 
-| Skrypt                 | Opis                                   |
-| ---------------------- | -------------------------------------- |
-| `npm run test`         | Uruchamia wszystkie testy Playwright   |
-| `npm run format`       | Formatuje kod za pomocą Prettier       |
-| `npm run format:check` | Sprawdza formatowanie bez zmian        |
-| `npm run lint`         | Sprawdza kod za pomocą ESLint          |
-| `npm run lint:fix`     | Naprawia problemy ESLint automatycznie |
+| Skrypt                         | Opis                                     |
+| ------------------------------ | ---------------------------------------- |
+| `npm run test`                 | Uruchamia wszystkie testy Playwright     |
+| `npm run test:ui`              | Uruchamia testy w trybie UI              |
+| `npm run test:headed`          | Uruchamia testy z widoczną przeglądarką  |
+| `npm run test:debug`           | Uruchamia testy w trybie debug           |
+| `npm run format`               | Formatuje kod za pomocą Prettier         |
+| `npm run format:check`         | Sprawdza formatowanie bez zmian          |
+| `npm run lint`                 | Sprawdza kod za pomocą ESLint            |
+| `npm run lint:fix`             | Naprawia problemy ESLint automatycznie   |
+| `npm run app:start`            | Uruchamia aplikację testową (foreground) |
+| `npm run app:start:background` | Uruchamia aplikację testową (background) |
+| `npm run app:stop`             | Zatrzymuje aplikację testową             |
+| `npm run dev`                  | Uruchamia aplikację + testy              |
+| `npm run dev:ui`               | Uruchamia aplikację + testy w trybie UI  |
 
 ## 🔍 Quality Assurance
 

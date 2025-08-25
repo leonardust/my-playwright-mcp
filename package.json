@@ -6,11 +6,19 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "app:start": "cd ../gad-gui-api-demo && npm start",
+    "app:start:background": "cd ../gad-gui-api-demo && start npm start",
+    "app:stop": "taskkill /f /im node.exe /t 2>nul || echo 'No Node.js processes to kill'",
+    "dev": "npm run app:start:background && timeout 5 && npm run test",
+    "dev:ui": "npm run app:start:background && timeout 5 && npm run test:ui"
   },
   "keywords": [],
   "author": "",
