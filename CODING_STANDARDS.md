@@ -58,18 +58,13 @@ export const ValidationConstants = {
   },
 } as const;
 
-// ✅ Explicit return types for utility functions
-export const randomString = (length: number): string => {
-  const chars = 'abcdefghijklmnopqrstuvwxyz';
-  return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join(
-    ''
-  );
-};
+// ✅ Using Faker.js for realistic test data generation
+import { faker } from '@faker-js/faker';
 
 export const generateTestUser = (): TestUser => ({
-  firstName: randomString(6),
-  lastName: randomString(6),
-  email: uniqueEmail(),
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  email: faker.internet.email({ provider: 'example.com' }),
   password: 'TestPassword123!',
 });
 ```
@@ -162,10 +157,10 @@ getAlert(): Locator {
   return this.page.getByRole('alert');
 }
 
-// ✅ Utility functions with proper typing
-const randomString = (length: number): string => {
-  // implementation
-};
+// ✅ Utility functions with Faker.js for realistic data
+import { faker } from '@faker-js/faker';
+
+const generateName = (): string => faker.person.firstName();
 ```
 
 ### Type Safety Best Practices
@@ -267,24 +262,13 @@ async ({ registerPage, loginPage, welcomePage }) => {
 
 ```typescript
 // ✅ Aktualne wzorce z projektu
-// Utility functions for test data generation
-export const randomString = (length: number): string => {
-  const chars = 'abcdefghijklmnopqrstuvwxyz';
-  return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join(
-    ''
-  );
-};
-
-export const uniqueEmail = (): string => {
-  const timestamp = Date.now();
-  const localPart = `test${timestamp}${randomString(5)}`;
-  return `${localPart}@example.com`;
-};
+// Utility functions for test data generation using Faker.js
+import { faker } from '@faker-js/faker';
 
 export const generateTestUser = (): TestUser => ({
-  firstName: randomString(6),
-  lastName: randomString(6),
-  email: uniqueEmail(),
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  email: faker.internet.email({ provider: 'example.com' }),
   password: 'TestPassword123!',
 });
 
@@ -295,6 +279,27 @@ interface TestUser {
   email: string;
   password: string;
 }
+```
+
+#### Faker.js Best Practices
+
+```typescript
+// ✅ Konsistentne dane z konkretnym providerem
+const email = faker.internet.email({ provider: 'example.com' });
+
+// ✅ Lokalizacja danych (opcjonalne)
+faker.locale = 'pl';
+const polishName = faker.person.firstName();
+
+// ✅ Seed dla powtarzalnych testów (opcjonalne)
+faker.seed(123);
+const reproducibleData = faker.person.firstName();
+
+// ✅ Inne przydatne generatory
+const phoneNumber = faker.phone.number();
+const address = faker.location.streetAddress();
+const company = faker.company.name();
+const birthDate = faker.date.birthdate({ min: 18, max: 99, mode: 'age' });
 ```
 
 ### Constants Usage
@@ -570,8 +575,8 @@ const validationConstants = {};
 ```typescript
 // ✅ Poprawne nazewnictwo z projektu
 const testUser = generateTestUser();
-const firstName = randomString(6);
-const uniqueEmail = (): string => {};
+const firstName = faker.person.firstName();
+const email = faker.internet.email({ provider: 'example.com' });
 const ERROR_CLASS = /octavalidate-inp-error/;
 
 // ✅ Method naming patterns
@@ -771,10 +776,13 @@ export interface TestUser {}
 export const ValidationConstants = {} as const;
 export const endpoints = {} as const;
 
-// ✅ Utility function exports
-export const randomString = (length: number): string => {};
-export const uniqueEmail = (): string => {};
-export const generateTestUser = (): TestUser => {};
+// ✅ Utility function exports with Faker.js
+export const generateTestUser = (): TestUser => ({
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  email: faker.internet.email({ provider: 'example.com' }),
+  password: 'TestPassword123!',
+});
 
 // ✅ Re-exports pattern
 export { TestUser } from './test-types';

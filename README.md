@@ -21,6 +21,7 @@ Ten projekt zawiera automatyczne testy end-to-end napisane w TypeScript z wykorz
 
 - **Playwright** - Framework do testów E2E
 - **TypeScript** - Typowany JavaScript
+- **Faker.js** - Biblioteka do generowania realistycznych danych testowych
 - **ESLint** - Linter dla JavaScript/TypeScript
 - **Prettier** - Formatter kodu
 - **Husky** - Git hooks dla automatycznego sprawdzania kodu
