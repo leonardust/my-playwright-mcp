@@ -1,9 +1,19 @@
 {
   "name": "playwright-mcp",
   "version": "1.0.0",
-  "description": "",
+  "description": "End-to-end test automation project using Playwright with Model Context Protocol integration",
   "main": "index.js",
   "type": "module",
+  "homepage": "https://github.com/leonardust/my-playwright-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leonardust/my-playwright-mcp.git"
+  },
+  "documentation": {
+    "coding-standards": "./CODING_STANDARDS.md",
+    "ai-instructions": "./.copilot-instructions.md",
+    "readme": "./README.md"
+  },
   "scripts": {
     "test": "playwright test",
     "test:ui": "playwright test --ui",

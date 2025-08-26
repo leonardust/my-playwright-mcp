@@ -1,0 +1,39 @@
+{
+  "files.associations": {
+    "CODING_STANDARDS.md": "markdown"
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/test-results/**": true,
+    "**/playwright-report/**": true
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "$(capture).js,$(capture).js.map",
+    "package.json": "package-lock.json,pnpm-lock.yaml,yarn.lock"
+  },
+  "markdown.validate.enabled": true,
+  "markdown.validate.fileLinks.enabled": true,
+  "files.eol": "\n",
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.suggest.autoImports": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "eslint.validate": ["typescript"],
+  "eslint.format.enable": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.wordWrap": "on"
+  }
+}

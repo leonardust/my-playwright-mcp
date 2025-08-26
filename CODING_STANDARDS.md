@@ -1,38 +1,38 @@
 # Coding Standards
 
-Ten dokument definiuje standardy kodowania dla projektu Playwright MCP. Przestrzeganie tych zasad zapewnia spójność, czytelność i łatwość utrzymania kodu.
+This document defines coding standards for the Playwright MCP project. Following these rules ensures consistency, readability, and maintainability of the code.
 
-## 📋 Spis treści
+## 📋 Table of Contents
 
-- [Ogólne zasady](#ogólne-zasady)
+- [General Rules](#general-rules)
 - [TypeScript Standards](#typescript-standards)
 - [Playwright Test Standards](#playwright-test-standards)
 - [Page Object Model](#page-object-model)
-- [Nazewnictwo](#nazewnictwo)
-- [Formatowanie kodu](#formatowanie-kodu)
-- [Komentarze i dokumentacja](#komentarze-i-dokumentacja)
-- [Import i Export](#import-i-export)
+- [Naming Conventions](#naming-conventions)
+- [Code Formatting](#code-formatting)
+- [Comments and Documentation](#comments-and-documentation)
+- [Import and Export](#import-and-export)
 - [Error Handling](#error-handling)
 - [Git Conventions](#git-conventions)
 - [Code Review](#code-review)
 
-## 🎯 Ogólne zasady
+## 🎯 General Rules
 
-### ✅ Podstawowe reguły
+### ✅ Basic Rules
 
-- **Kod powinien być czytelny** - pisz kod tak, jakby czytał go człowiek, nie komputer
-- **Konsystencja** - przestrzegaj ustalonych wzorców w całym projekcie
-- **Prostota** - wybierz najprostsze rozwiązanie, które działa
-- **DRY (Don't Repeat Yourself)** - unikaj duplikacji kodu
-- **KISS (Keep It Simple, Stupid)** - prostota ponad wszystko
+- **Code should be readable** - write code as if a human, not a computer, will read it
+- **Consistency** - follow established patterns throughout the project
+- **Simplicity** - choose the simplest solution that works
+- **DRY (Don't Repeat Yourself)** - avoid code duplication
+- **KISS (Keep It Simple, Stupid)** - simplicity above all
 
-### 🚫 Zakazane praktyki
+### 🚫 Forbidden Practices
 
-- ❌ Używanie `any` bez uzasadnienia
-- ❌ Komentowanie kodu zamiast jego usunięcia
-- ❌ Długie funkcje (>50 linii)
-- ❌ Globalne zmienne
-- ❌ Magiczne liczby bez wyjaśnienia
+- ❌ Using `any` without justification
+- ❌ Commenting out code instead of deleting it
+- ❌ Long functions (>50 lines)
+- ❌ Global variables
+- ❌ Magic numbers without explanation
 
 ## 🔧 TypeScript Standards
 
@@ -80,9 +80,6 @@ export abstract class BasePage {
     this.page = page;
   }
 
-  // Abstract members for implementation in subclasses
-  abstract get url(): string;
-
   // Protected methods for internal use
   protected async navigate(url: string): Promise<void> {
     await this.page.goto(url);
@@ -91,6 +88,14 @@ export abstract class BasePage {
   // Public interface methods
   async getUrl(): Promise<string> {
     return this.page.url();
+  }
+
+  async waitForUrl(url: string): Promise<void> {
+    await this.page.waitForURL(url);
+  }
+
+  getAlert(): Locator {
+    return this.page.getByRole('alert');
   }
 }
 
@@ -125,15 +130,15 @@ export class RegisterPage extends BasePage {}
 export const ValidationConstants = {} as const;
 export interface TestUser {}
 
-// ✅ Import patterns from project
+// ✅ Import patterns from project using TypeScript path mapping
 import { Locator, Page } from '@playwright/test';
-import { endpoints } from '../config/urls';
-import { BasePage } from './base.page';
-import { TestUser } from './test-types';
+import { endpoints } from '@config/urls.js';
+import { BasePage } from '@pages/base.page.js';
+import { TestUser } from '@utils/test-types.js';
 
 // ✅ Re-exports for convenience
-export { TestUser } from './test-types';
-export { ValidationConstants } from '../constants/validation';
+export { TestUser } from '@utils/test-types.js';
+export { ValidationConstants } from '@constants/validation.js';
 ```
 
 ### Method Signatures
@@ -188,11 +193,11 @@ const config = data as PlaywrightConfig;
 ### Test Structure (Based on Current Implementation)
 
 ```typescript
-// ✅ Aktualna struktura z projektu
+// ✅ Current project structure
 import { expect } from '@playwright/test';
-import { test } from '../fixtures/pages'; // Custom fixture
-import { generateTestUser } from '../utils/test-helpers';
-import { ValidationConstants } from '../constants/validation';
+import { test } from '@fixtures/pages.js'; // Custom fixture
+import { generateTestUser } from '@utils/test-helpers.js';
+import { ValidationConstants } from '@constants/validation.js';
 
 test.describe('Authentication Module', () => {
   test.describe.serial('Positive Authentication Flow', () => {
@@ -261,7 +266,7 @@ async ({ registerPage, loginPage, welcomePage }) => {
 ### Test Data Management
 
 ```typescript
-// ✅ Aktualne wzorce z projektu
+// ✅ Current project patterns
 // Utility functions for test data generation using Faker.js
 import { faker } from '@faker-js/faker';
 
@@ -284,18 +289,18 @@ interface TestUser {
 #### Faker.js Best Practices
 
 ```typescript
-// ✅ Konsistentne dane z konkretnym providerem
+// ✅ Consistent data with specific provider
 const email = faker.internet.email({ provider: 'example.com' });
 
-// ✅ Lokalizacja danych (opcjonalne)
+// ✅ Data localization (optional)
 faker.locale = 'pl';
 const polishName = faker.person.firstName();
 
-// ✅ Seed dla powtarzalnych testów (opcjonalne)
+// ✅ Seed for repeatable tests (optional)
 faker.seed(123);
 const reproducibleData = faker.person.firstName();
 
-// ✅ Inne przydatne generatory
+// ✅ Other useful generators
 const phoneNumber = faker.phone.number();
 const address = faker.location.streetAddress();
 const company = faker.company.name();
@@ -323,7 +328,7 @@ await expect(element).toHaveClass(ValidationConstants.ERROR_CLASS);
 ### Test Naming Conventions
 
 ```typescript
-// ✅ Poprawne nazwy testów (z aktualnego projektu)
+// ✅ Correct test names (from current project)
 test('should successfully register a new user');
 test('should successfully login with newly created user');
 test('should validate empty form fields');
@@ -365,7 +370,7 @@ await expect(errorMessage).toBeVisible();
 ### Base Page Structure
 
 ```typescript
-// ✅ Poprawny Page Object bazujący na rzeczywistym kodzie
+// ✅ Correct Page Object based on actual code
 export abstract class BasePage {
   protected readonly page: Page;
 
@@ -373,15 +378,12 @@ export abstract class BasePage {
     this.page = page;
   }
 
-  // Abstract getter dla URL (implementowany w klasach pochodnych)
-  abstract get url(): string;
-
-  // Protected metody dla wspólnej funkcjonalności
+  // Protected methods for shared functionality
   protected async navigate(url: string): Promise<void> {
     await this.page.goto(url);
   }
 
-  // Public metody z explicit return types
+  // Public methods with explicit return types
   async getUrl(): Promise<string> {
     return this.page.url();
   }
@@ -390,15 +392,15 @@ export abstract class BasePage {
     await this.page.waitForURL(url);
   }
 
-  // Wspólne elementy UI
+  // Common UI elements
   getAlert(): Locator {
     return this.page.getByRole('alert');
   }
 }
 
-// ✅ Implementacja Page Object dla konkretnej strony
+// ✅ Page Object implementation for specific page
 export class RegisterPage extends BasePage {
-  // Private readonly locators jako properties
+  // Private readonly locators as properties
   private readonly firstName: Locator;
   private readonly lastName: Locator;
   private readonly email: Locator;
@@ -407,7 +409,7 @@ export class RegisterPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    // Inicjalizacja locatorów w konstruktorze
+    // Initialize locators in constructor
     this.firstName = page.getByTestId('firstname-input');
     this.lastName = page.getByTestId('lastname-input');
     this.email = page.getByTestId('email-input');
@@ -415,7 +417,7 @@ export class RegisterPage extends BasePage {
     this.submitButton = page.getByTestId('register-button');
   }
 
-  // Implementation of abstract getter
+  // Concrete getter for URL (non-abstract in actual code)
   get url(): string {
     return endpoints.register;
   }
@@ -443,25 +445,42 @@ export class RegisterPage extends BasePage {
     await this.fillForm(data);
     await this.submit();
   }
+
+  // Getters for external access when needed
+  getFirstNameInput(): Locator {
+    return this.firstName;
+  }
+
+  getLastNameInput(): Locator {
+    return this.lastName;
+  }
+
+  getEmailInput(): Locator {
+    return this.email;
+  }
+
+  getPasswordInput(): Locator {
+    return this.password;
+  }
 }
-````
+```
 
 ### Selector Strategy (Based on Current Code)
 
 ```typescript
-// ✅ Current project używa getByTestId() - najbardziej preferowane
+// ✅ Current project uses getByTestId() - most preferred
 page.getByTestId('firstname-input');
 page.getByTestId('register-button');
 
-// ✅ Role-based selectors dla semantic elements
+// ✅ Role-based selectors for semantic elements
 page.getByRole('alert');
 page.getByRole('button', { name: 'Submit' });
 
-// ✅ CSS selectors tylko dla specific cases
+// ✅ CSS selectors only for specific cases
 page.locator('.octavalidate-inp-error');
 
-// ❌ Unikaj w tym projekcie:
-page.locator('input[name="firstName"]'); // Użyj getByTestId zamiast
+// ❌ Avoid in this project:
+page.locator('input[name="firstName"]'); // Use getByTestId instead
 page.locator('div:nth-child(3)'); // Fragile selectors
 ```
 
@@ -473,7 +492,7 @@ export class LoginPage extends BasePage {
   private readonly emailInput: Locator;
   private readonly passwordInput: Locator;
 
-  // Getters dla external access when needed
+  // Getters for external access when needed
   getEmailInput(): Locator {
     return this.emailInput;
   }
@@ -497,13 +516,11 @@ async login(credentials: LoginCredentials): Promise<void> {
 }
 ```
 
-````
-
 ### Selector Strategy
 
 ```typescript
-// ✅ Priority order dla selektorów:
-// 1. data-testid (najbardziej preferowane)
+// ✅ Priority order for selectors:
+// 1. data-testid (most preferred)
 '[data-testid="submit-button"]';
 
 // 2. ARIA attributes
@@ -512,20 +529,20 @@ async login(credentials: LoginCredentials): Promise<void> {
 // 3. Semantic HTML
 'button[type="submit"]';
 
-// 4. CSS classes (tylko jeśli są stabilne)
+// 4. CSS classes (only if stable)
 '.submit-btn';
 
-// ❌ Unikaj:
+// ❌ Avoid:
 'div > p:nth-child(3)'; // Fragile selectors
 '#element-123456'; // Generated IDs
 ````
 
-## 📝 Nazewnictwo
+## 📝 Naming Conventions
 
 ### Files and Directories (Based on Current Project)
 
-```
-✅ Poprawne nazwy plików (z projektu):
+```text
+✅ Correct file names (from project):
 - register.page.ts
 - login.page.ts
 - base.page.ts
@@ -543,7 +560,7 @@ async login(credentials: LoginCredentials): Promise<void> {
 - config/ (Configuration files)
 - fixtures/ (Test fixtures)
 
-❌ Niepoprawne nazwy plików:
+❌ Incorrect file names:
 - RegisterPage.ts
 - authTests.ts
 - Helpers.ts
@@ -552,7 +569,7 @@ async login(credentials: LoginCredentials): Promise<void> {
 ### Classes and Interfaces (From Current Code)
 
 ```typescript
-// ✅ Poprawne nazewnictwo z projektu
+// ✅ Correct naming from project
 class RegisterPage extends BasePage {}
 class LoginPage extends BasePage {}
 abstract class BasePage {}
@@ -564,7 +581,7 @@ interface LoginCredentials {}
 const ValidationConstants = {} as const;
 export const endpoints = {} as const;
 
-// ❌ Niepoprawne nazewnictwo
+// ❌ Incorrect naming
 class registerPage {}
 interface testUser {}
 const validationConstants = {};
@@ -573,7 +590,7 @@ const validationConstants = {};
 ### Variables and Functions (Current Patterns)
 
 ```typescript
-// ✅ Poprawne nazewnictwo z projektu
+// ✅ Correct naming from project
 const testUser = generateTestUser();
 const firstName = faker.person.firstName();
 const email = faker.internet.email({ provider: 'example.com' });
@@ -641,11 +658,11 @@ export const endpoints = {
 } as const;
 ```
 
-## 🎨 Formatowanie kodu
+## 🎨 Code Formatting
 
 ### Prettier Configuration
 
-Projekt używa Prettier z następującą konfiguracją:
+The project uses Prettier with the following configuration:
 
 ```json
 {
@@ -662,7 +679,7 @@ Projekt używa Prettier z następującą konfiguracją:
 ### Code Style Examples
 
 ```typescript
-// ✅ Poprawne formatowanie
+// ✅ Correct formatting
 const userConfig = {
   name: 'John Doe',
   email: 'john@example.com',
@@ -684,7 +701,7 @@ const [firstName, lastName] = fullName.split(' ');
 const { id, name, email } = user;
 ```
 
-## 📚 Komentarze i dokumentacja
+## 📚 Comments and Documentation
 
 ### JSDoc Comments
 
@@ -704,18 +721,18 @@ async function authenticateUser(email: string, password: string): Promise<void> 
 ### Inline Comments
 
 ```typescript
-// ✅ Dobrze - wyjaśnia "dlaczego", nie "co"
+// ✅ Good - explains "why", not "what"
 // Wait for animation to complete before proceeding
 await page.waitForTimeout(500);
 
 // Retry mechanism for flaky network requests
 const maxRetries = 3;
 
-// ❌ Źle - opisuje oczywiste
+// ❌ Bad - describes obvious
 // Set user name to John
 const userName = 'John';
 
-// ❌ Źle - komentarz zamiast refactoringu
+// ❌ Bad - comment instead of refactoring
 // This is a hack, but it works
 // TODO: fix this later
 ```
@@ -723,22 +740,22 @@ const userName = 'John';
 ### TODO Comments
 
 ```typescript
-// ✅ Poprawne TODO
+// ✅ Correct TODO
 // TODO(username): Add validation for email format - Issue #123
 // FIXME: Handle edge case when user has no permissions
 // NOTE: This workaround is needed for Safari compatibility
 
-// ❌ Niepoprawne TODO
+// ❌ Incorrect TODO
 // TODO: fix this
 // HACK: quick fix
 ```
 
-## 📦 Import i Export
+## 📦 Import and Export
 
 ### Import Order (Based on Current Code)
 
 ```typescript
-// ✅ Aktualne wzorce z projektu
+// ✅ Current project patterns
 
 // 1. External libraries
 import { test as base } from '@playwright/test';
@@ -746,28 +763,28 @@ import { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 // 2. Internal modules - config
-import { endpoints } from '../config/urls';
+import { endpoints } from '@config/urls.js';
 
 // 3. Internal modules - constants
-import { ValidationConstants } from '../constants/validation';
+import { ValidationConstants } from '@constants/validation.js';
 
 // 4. Internal modules - utilities
-import { generateTestUser } from '../utils/test-helpers';
-import { TestUser } from '../utils/test-types';
+import { generateTestUser } from '@utils/test-helpers.js';
+import { TestUser } from '@utils/test-types.js';
 
 // 5. Internal modules - pages
-import { BasePage } from './base.page';
-import { RegisterPage } from '../pages/register.page';
-import { LoginPage } from '../pages/login.page';
+import { BasePage } from '@pages/base.page.js';
+import { RegisterPage } from '@pages/register.page.js';
+import { LoginPage } from '@pages/login.page.js';
 
 // 6. Custom fixtures
-import { test } from '../fixtures/pages';
+import { test } from '@fixtures/pages.js';
 ```
 
 ### Export Patterns (Current Project)
 
 ```typescript
-// ✅ Named exports (preferred w projekcie)
+// ✅ Named exports (preferred in project)
 export class RegisterPage extends BasePage {}
 export class LoginPage extends BasePage {}
 export abstract class BasePage {}
@@ -793,9 +810,9 @@ export { TestUser } from './test-types';
 ```typescript
 // ✅ Custom test fixtures implementation
 import { test as base } from '@playwright/test';
-import { RegisterPage } from '../pages/register.page';
-import { LoginPage } from '../pages/login.page';
-import { WelcomePage } from '../pages/welcome.page';
+import { RegisterPage } from '@pages/register.page.js';
+import { LoginPage } from '@pages/login.page.js';
+import { WelcomePage } from '@pages/welcome.page.js';
 
 type Pages = {
   registerPage: RegisterPage;
@@ -816,9 +833,9 @@ export const test = base.extend<Pages>({
 });
 
 // ✅ Usage in tests
-import { test } from '../fixtures/pages';
+import { test } from '@fixtures/pages.js';
 
-test('should register user', async ({ registerPage, loginPage }) => {
+test('should successfully register a new user', async ({ registerPage, loginPage }) => {
   // Multiple page objects available
 });
 ```
@@ -860,26 +877,26 @@ async function waitForElement(selector: string, timeout = 5000): Promise<void> {
 
 ### Commit Messages
 
-#### Zasada projektu: Preferujemy proste, zwięzłe commit messages
+#### Project Rule: We prefer simple, concise commit messages
 
 Format: `type: brief description`
 
 ```bash
-# ✅ Preferowane w tym projekcie - proste i zwięzłe
+# ✅ Preferred in this project - simple and concise
 feat: add Faker.js for test data generation
 fix: resolve login validation issue
 test: add email format validation
 docs: update README with Faker.js info
 refactor: simplify test helpers
 
-# ✅ Opcjonalnie z scope (jeśli potrzebne)
+# ✅ Optionally with scope (if needed)
 feat(auth): add password reset functionality
 fix(login): resolve session timeout issue
 
-# ❌ Unikaj zbyt szczegółowych commitów
+# ❌ Avoid overly detailed commits
 feat(test-data): implement Faker.js library for realistic test data generation with firstName, lastName and email fields replacing previous randomString and uniqueEmail functions while maintaining backward compatibility and updating all related documentation
 
-# ❌ Niepoprawne commit messages
+# ❌ Incorrect commit messages
 fix login
 added tests
 update
@@ -888,24 +905,24 @@ wip
 
 ### Commit Types
 
-- **feat**: nowa funkcjonalność
-- **fix**: naprawa błędu
-- **test**: dodanie lub modyfikacja testów
-- **refactor**: refaktoryzacja kodu
-- **docs**: zmiany w dokumentacji
-- **style**: formatowanie, bez zmian logiki
-- **chore**: aktualizacja zależności, konfiguracji
+- **feat**: new functionality
+- **fix**: bug fix
+- **test**: adding or modifying tests
+- **refactor**: code refactoring
+- **docs**: documentation changes
+- **style**: formatting changes, no logic changes
+- **chore**: dependency updates, configuration
 
 ### Branch Naming
 
 ```bash
-# ✅ Poprawne nazwy branchy
+# ✅ Correct branch names
 feature/user-authentication
 fix/login-session-timeout
 test/email-validation
 refactor/page-object-structure
 
-# ❌ Niepoprawne nazwy branchy
+# ❌ Incorrect branch names
 login-fix
 test-branch
 my-changes
@@ -915,33 +932,33 @@ my-changes
 
 ### Review Checklist
 
-#### ✅ Co sprawdzać:
+#### ✅ What to Check
 
-- [ ] Kod spełnia wszystkie standardy z tego dokumentu
-- [ ] Testy pokrywają nową funkcjonalność
-- [ ] Brak hardcoded values (używa konstant/konfiguracji)
-- [ ] Error handling jest implementowane
-- [ ] Performance considerations zostały uwzględnione
-- [ ] Security best practices są przestrzegane
-- [ ] Documentation jest zaktualizowana
+- [ ] Code meets all standards from this document
+- [ ] Tests cover new functionality
+- [ ] No hardcoded values (uses constants/configuration)
+- [ ] Error handling is implemented
+- [ ] Performance considerations are addressed
+- [ ] Security best practices are followed
+- [ ] Documentation is updated
 
-#### 🔍 Pytania do zadania:
+#### 🔍 Questions for Task
 
-- Czy kod jest czytelny i zrozumiały?
-- Czy logika biznesowa jest poprawnie zaimplementowana?
-- Czy są potencjalne edge cases?
-- Czy testy są comprehensive i stable?
-- Czy kod można łatwo utrzymać i rozszerzyć?
+- Is the code readable and understandable?
+- Is the business logic correctly implemented?
+- Are there potential edge cases?
+- Are tests comprehensive and stable?
+- Can the code be easily maintained and extended?
 
 ### Review Comments
 
 ```typescript
-// ✅ Konstruktywne komentarze
+// ✅ Constructive comments
 // Consider extracting this logic into a helper function for reusability
 // This selector might be fragile - consider using data-testid instead
 // Great implementation! This makes the code much more readable
 
-// ❌ Niepomocne komentarze
+// ❌ Unhelpful comments
 // This is wrong
 // Change this
 // I don't like this approach
@@ -985,27 +1002,27 @@ const result = await page.evaluate(() => {
 
 ## 📋 Checklist przed merge
 
-- [ ] Wszystkie testy przechodzą
-- [ ] ESLint i Prettier nie zgłaszają błędów
-- [ ] Code review został przeprowadzony
-- [ ] Dokumentacja została zaktualizowana
-- [ ] Commit messages przestrzegają konwencji
+- [ ] All tests pass
+- [ ] ESLint and Prettier report no errors
+- [ ] Code review has been conducted
+- [ ] Documentation has been updated
+- [ ] Commit messages follow conventions
 - [ ] Branch jest up-to-date z main
-- [ ] Performance impact został oceniony
+- [ ] Performance impact has been evaluated
 
 ---
 
-## 🔧 Narzędzia automatyczne
+## 🔧 Automated Tools
 
-Ten projekt używa następujących narzędzi do egzekwowania standardów:
+This project uses the following tools to enforce standards:
 
-- **ESLint** - automatyczne sprawdzanie jakości kodu
+- **ESLint** - automatic code quality checking
 - **Prettier** - automatyczne formatowanie
-- **Husky** - git hooks dla pre-commit sprawdzeń
-- **lint-staged** - uruchamianie narzędzi tylko na zmienionych plikach
+- **Husky** - git hooks for pre-commit checks
+- **lint-staged** - running tools only on changed files
 
-Wszystkie te narzędzia działają automatycznie podczas każdego commita.
+All these tools work automatically with every commit.
 
 ---
 
-**Pamiętaj**: Te standardy to żywy dokument. Jeśli masz sugestie ulepszeń, stwórz issue lub pull request! 🚀
+**Remember**: These standards are a living document. If you have suggestions for improvements, create an issue or pull request! 🚀

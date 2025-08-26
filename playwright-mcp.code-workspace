@@ -1,0 +1,30 @@
+{
+  "folders": [
+    {
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "files.associations": {
+      "CODING_STANDARDS.md": "markdown",
+      ".copilot-instructions.md": "markdown",
+    },
+    "markdown.validate.enabled": true,
+    "editor.rulers": [100],
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/test-results": true,
+      "**/playwright-report": true,
+      "**/dist": true,
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-playwright.playwright",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "ms-vscode.vscode-typescript-next",
+    ],
+  },
+}

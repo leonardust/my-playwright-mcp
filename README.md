@@ -1,61 +1,77 @@
 # Playwright MCP
 
-Projekt automatyzacji testów end-to-end wykorzystujący Playwright z integracją Model Context Protocol (MCP).
+End-to-end test automation project using Playwright with Model Context Protocol (MCP) integration.
 
-## 📋 Spis treści
+## 🎯 **IMPORTANT: Coding Standards**
 
-- [Opis projektu](#opis-projektu)
-- [Wymagania](#wymagania)
-- [Instalacja](#instalacja)
-- [Struktura projektu](#struktura-projektu)
-- [Konfiguracja](#konfiguracja)
-- [Uruchomienie](#uruchomienie)
-- [Skrypty npm](#skrypty-npm)
-- [Quality Assurance](#quality-assurance)
-- [Git Hooks](#git-hooks)
-- [Rozwój](#rozwój)
+**⚠️ Before making any changes to this project, read [`CODING_STANDARDS.md`](./CODING_STANDARDS.md) first!**
 
-## 🎯 Opis projektu
+This document contains:
 
-Ten projekt zawiera automatyczne testy end-to-end napisane w TypeScript z wykorzystaniem frameworka Playwright. Projekt jest skonfigurowany z zaawansowanymi narzędziami do zapewnienia jakości kodu:
+- ✅ **Complete coding conventions** for the entire project
+- ✅ **TypeScript patterns** and best practices
+- ✅ **Page Object Model** implementation guidelines
+- ✅ **Test structure** and naming conventions
+- ✅ **Import/export patterns** with TypeScript path mapping
+- ✅ **Git conventions** and commit message rules
 
-- **Playwright** - Framework do testów E2E
-- **TypeScript** - Typowany JavaScript
-- **Faker.js** - Biblioteka do generowania realistycznych danych testowych
-- **ESLint** - Linter dla JavaScript/TypeScript
-- **Prettier** - Formatter kodu
-- **Husky** - Git hooks dla automatycznego sprawdzania kodu
+**All code in this project follows these standards strictly.** Any new code must be consistent with established patterns.
 
-## 🔧 Wymagania
+## 📋 Table of Contents
+
+- [Coding Standards](#-important-coding-standards)
+- [Project Description](#-project-description)
+- [Requirements](#-requirements)
+- [Installation](#-installation)
+- [Project Structure](#-project-structure)
+- [Configuration](#-configuration)
+- [Running Tests](#-running-tests)
+- [NPM Scripts](#-npm-scripts)
+- [Quality Assurance](#-quality-assurance)
+- [Git Hooks](#-git-hooks)
+- [Development](#-development)
+
+## 🎯 Project Description
+
+This project contains automated end-to-end tests written in TypeScript using the Playwright framework. The project is configured with advanced tools to ensure code quality:
+
+- **Playwright** - E2E testing framework
+- **TypeScript** - Typed JavaScript
+- **Faker.js** - Library for generating realistic test data
+- **ESLint** - Linter for JavaScript/TypeScript
+- **Prettier** - Code formatter
+- **Husky** - Git hooks for automatic code checking
+
+## 🔧 Requirements
 
 - **Node.js** >= 18.0.0
 - **npm** >= 8.0.0
-- **Git** - do zarządzania wersją
+- **Git** - for version control
 
-## 🚀 Instalacja
+## 🚀 Installation
 
-### 1. Klonowanie repozytorium
+### 1. Clone Repository
 
 ```bash
 git clone <repository-url>
 cd playwright-mcp
 ```
 
-### 2. Instalacja zależności
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Instalacja przeglądarek Playwright
+### 3. Install Playwright Browsers
 
 ```bash
 npx playwright install
 ```
 
-### 4. Przygotowanie aplikacji testowej
+### 4. Test Application Setup
 
-Projekt wymaga aplikacji testowej GAD GUI API Demo. Upewnij się, że jest ona sklonowana w katalogu nadrzędnym:
+The project requires the GAD GUI API Demo test application. Make sure it's cloned in the parent directory:
 
 ```bash
 cd ..
@@ -65,156 +81,176 @@ npm install
 cd ../playwright-mcp
 ```
 
-## 📁 Struktura projektu
+## 📁 Project Structure
 
 ```
 playwright-mcp/
 ├── config/
-│   └── urls.ts              # Konfiguracja URL-i
+│   └── urls.ts              # URL configuration
 ├── constants/
-│   └── validation.ts        # Stałe walidacyjne
+│   └── validation.ts        # Validation constants
 ├── fixtures/
-│   └── pages.ts            # Fixtures dla page objects
+│   └── pages.ts            # Page object fixtures
 ├── pages/
-│   ├── base.page.ts        # Bazowa klasa page object
-│   ├── login.page.ts       # Page object dla logowania
-│   ├── register.page.ts    # Page object dla rejestracji
-│   └── welcome.page.ts     # Page object dla strony powitalnej
+│   ├── base.page.ts        # Base page object class
+│   ├── login.page.ts       # Login page object
+│   ├── register.page.ts    # Registration page object
+│   └── welcome.page.ts     # Welcome page object
 ├── tests/
-│   └── auth.spec.ts        # Testy autoryzacji
+│   └── auth.spec.ts        # Authentication tests
 ├── utils/
-│   ├── test-helpers.ts     # Pomocnicze funkcje
-│   └── test-types.ts       # Typy TypeScript
+│   ├── test-helpers.ts     # Helper functions
+│   └── test-types.ts       # TypeScript types
 ├── .husky/
 │   └── pre-commit          # Git pre-commit hook
-├── eslint.config.js        # Konfiguracja ESLint
-├── playwright.config.ts    # Konfiguracja Playwright
-├── .prettierrc            # Konfiguracja Prettier
-└── package.json           # Zależności i skrypty
+├── eslint.config.js        # ESLint configuration
+├── playwright.config.ts    # Playwright configuration
+├── .prettierrc            # Prettier configuration
+└── package.json           # Dependencies and scripts
 ```
 
-## ⚙️ Konfiguracja
+## ⚙️ Configuration
 
 ### Playwright Configuration
 
-Projekt jest skonfigurowany do uruchamiania testów na:
+The project is configured to run tests on:
 
 - **Browser**: Chromium
 - **Base URL**: `http://localhost:3000`
 - **Viewport**: 1280x720
-- **Screenshots**: tylko przy błędach
+- **Screenshots**: only on failures
 
 ### ESLint Configuration
 
-- Sprawdzanie składni TypeScript
-- Reguły dla projektów Playwright
-- Automatyczne naprawianie prostych błędów
+- TypeScript syntax checking
+- Rules for Playwright projects
+- Automatic fixing of simple errors
 
 ### Prettier Configuration
 
-- Średniki: włączone
-- Pojedyncze cudzysłowy
-- Szerokość tabulacji: 2 spacje
-- Maksymalna długość linii: 100 znaków
+- Semicolons: enabled
+- Single quotes
+- Tab width: 2 spaces
+- Maximum line length: 100 characters
 
-## 🏃‍♂️ Uruchomienie
+### TypeScript Path Mapping
 
-### Uruchomienie aplikacji testowej
+The project uses TypeScript path aliases for cleaner imports:
 
-Przed uruchomieniem testów należy uruchomić aplikację testową GAD GUI API Demo:
+```typescript
+// ✅ Use aliases instead of relative paths
+import { BasePage } from '@pages/base.page.js';
+import { endpoints } from '@config/urls.js';
+import { generateTestUser } from '@utils/test-helpers.js';
+import { ValidationConstants } from '@constants/validation.js';
+```
+
+Available aliases:
+
+- `@pages/*` → `./pages/*`
+- `@utils/*` → `./utils/*`
+- `@config/*` → `./config/*`
+- `@constants/*` → `./constants/*`
+- `@fixtures/*` → `./fixtures/*`
+
+## 🏃‍♂️ Running Tests
+
+### Starting Test Application
+
+Before running tests, you need to start the GAD GUI API Demo test application:
 
 ```bash
-# Uruchomienie aplikacji (w osobnym terminalu)
+# Start application (in separate terminal)
 npm run app:start
 
-# Lub uruchomienie aplikacji w tle (Windows)
+# Or start application in background (Windows)
 npm run app:start:background
 
-# Zatrzymanie aplikacji (Windows)
+# Stop application (Windows)
 npm run app:stop
 ```
 
-### Uruchomienie testów
+### Running Tests
 
 ```bash
-# Uruchomienie wszystkich testów (aplikacja musi być uruchomiona)
+# Run all tests (application must be running)
 npm run test
 
-# Uruchomienie testów w trybie UI
+# Run tests in UI mode
 npm run test:ui
 
-# Uruchomienie testów w trybie headed (widoczna przeglądarka)
+# Run tests in headed mode (visible browser)
 npm run test:headed
 
-# Uruchomienie testów w trybie debug
+# Run tests in debug mode
 npm run test:debug
 
-# Uruchomienie konkretnego testu
+# Run specific test
 npx playwright test tests/auth.spec.ts
 
-# Uruchomienie testów z raportem
+# Run tests with report
 npx playwright test --reporter=html
 ```
 
-### Workflow dla developera
+### Developer Workflow
 
 ```bash
-# Terminal 1: Uruchom aplikację
+# Terminal 1: Start application
 npm run app:start
 
-# Terminal 2: Uruchom testy
+# Terminal 2: Run tests
 npm run test:ui
 
-# Lub szybkie uruchomienie (eksperymentalne)
-npm run dev        # uruchom app + testy
-npm run dev:ui     # uruchom app + testy UI
+# Or quick startup (experimental)
+npm run dev        # start app + tests
+npm run dev:ui     # start app + tests UI
 ```
 
-### Tryb deweloperski
+### Development Mode
 
 ```bash
-# Sprawdzanie formatowania
+# Check formatting
 npm run format:check
 
-# Automatyczne formatowanie
+# Auto format
 npm run format
 
-# Sprawdzanie ESLint
+# Check ESLint
 npm run lint
 
-# Automatyczne naprawianie ESLint
+# Auto fix ESLint
 npm run lint:fix
 ```
 
-## 📜 Skrypty npm
+## 📜 NPM Scripts
 
-| Skrypt                         | Opis                                     |
-| ------------------------------ | ---------------------------------------- |
-| `npm run test`                 | Uruchamia wszystkie testy Playwright     |
-| `npm run test:ui`              | Uruchamia testy w trybie UI              |
-| `npm run test:headed`          | Uruchamia testy z widoczną przeglądarką  |
-| `npm run test:debug`           | Uruchamia testy w trybie debug           |
-| `npm run format`               | Formatuje kod za pomocą Prettier         |
-| `npm run format:check`         | Sprawdza formatowanie bez zmian          |
-| `npm run lint`                 | Sprawdza kod za pomocą ESLint            |
-| `npm run lint:fix`             | Naprawia problemy ESLint automatycznie   |
-| `npm run app:start`            | Uruchamia aplikację testową (foreground) |
-| `npm run app:start:background` | Uruchamia aplikację testową (background) |
-| `npm run app:stop`             | Zatrzymuje aplikację testową             |
-| `npm run dev`                  | Uruchamia aplikację + testy              |
-| `npm run dev:ui`               | Uruchamia aplikację + testy w trybie UI  |
+| Script                         | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `npm run test`                 | Run all Playwright tests             |
+| `npm run test:ui`              | Run tests in UI mode                 |
+| `npm run test:headed`          | Run tests with visible browser       |
+| `npm run test:debug`           | Run tests in debug mode              |
+| `npm run format`               | Format code with Prettier            |
+| `npm run format:check`         | Check formatting without changes     |
+| `npm run lint`                 | Check code with ESLint               |
+| `npm run lint:fix`             | Fix ESLint issues automatically      |
+| `npm run app:start`            | Start test application (foreground)  |
+| `npm run app:start:background` | Start test application (background)  |
+| `npm run app:stop`             | Stop test application                |
+| `npm run dev`                  | Start application + tests            |
+| `npm run dev:ui`               | Start application + tests in UI mode |
 
 ## 🔍 Quality Assurance
 
 ### Code Quality Tools
 
-- **ESLint**: Statyczna analiza kodu JavaScript/TypeScript
-- **Prettier**: Automatyczne formatowanie kodu
-- **TypeScript**: Typowanie statyczne
+- **ESLint**: Static analysis for JavaScript/TypeScript code
+- **Prettier**: Automatic code formatting
+- **TypeScript**: Static typing
 
 ### Lint-staged Configuration
 
-Automatyczne sprawdzanie plików przed commitem:
+Automatic file checking before commit:
 
 ```json
 {
@@ -227,93 +263,125 @@ Automatyczne sprawdzanie plików przed commitem:
 
 ### Pre-commit Hook
 
-Automatycznie uruchamiany przed każdym commitem:
+Automatically runs before each commit:
 
-1. **ESLint** - sprawdza i naprawia błędy w kodzie
-2. **Prettier** - formatuje kod zgodnie z regułami
-3. **Blokuje commit** jeśli znajdzie nienaprawialne błędy
+1. **ESLint** - checks and fixes code errors
+2. **Prettier** - formats code according to rules
+3. **Blocks commit** if it finds unfixable errors
 
-### Konfiguracja Husky
+### Husky Configuration
 
 ```bash
 # .husky/pre-commit
 npx lint-staged
 ```
 
-## 🛠 Rozwój
+## 🛠 Development
 
-### Dodawanie nowych testów
+### Adding New Tests
 
-1. Utwórz nowy plik w katalogu `tests/`
-2. Zaimportuj potrzebne page objects z `fixtures/`
-3. Napisz testy używając wzorca Page Object Model
+1. Create a new file in the `tests/` directory
+2. Import needed modules using TypeScript path mapping:
 
-### Dodawanie nowych page objects
+   ```typescript
+   import { test } from '@fixtures/pages.js';
+   import { generateTestUser } from '@utils/test-helpers.js';
+   ```
 
-1. Utwórz nowy plik w katalogu `pages/`
-2. Rozszerz klasę `BasePage`
-3. Dodaj selektory i metody specyficzne dla strony
+3. Write tests using the Page Object Model pattern
+
+### Adding New Page Objects
+
+1. Create a new file in the `pages/` directory
+2. Extend the `BasePage` class:
+
+   ```typescript
+   import { BasePage } from '@pages/base.page.js';
+   import { endpoints } from '@config/urls.js';
+   ```
+
+3. Add selectors and methods specific to the page
 
 ### Best Practices
 
-- Używaj wzorca **Page Object Model**
-- Pisz **deskryptywne nazwy testów**
-- Grupuj testy w **logiczne suite'y**
-- Używaj **type-safe selektorów**
-- Dodawaj **komentarze** do skomplikowanej logiki
+- Use **Page Object Model** pattern
+- Write **descriptive test names**
+- Group tests into **logical suites**
+- Use **type-safe selectors**
+- Add **comments** to complex logic
 
 ### Git Conventions
 
-**Zasada projektu:** Preferujemy proste, zwięzłe commit messages
+**Project Rule:** We prefer simple, concise commit messages
 
 ```bash
-# ✅ Preferowane
+# ✅ Preferred
 feat: add Faker.js for test data generation
 fix: resolve login validation issue
 test: add email format validation
 
-# ❌ Unikaj
+# ❌ Avoid
 feat(test-data): implement comprehensive Faker.js library...
 ```
 
-### Przed commitem
+### Before Committing
 
-Hook pre-commit automatycznie:
+Pre-commit hook automatically:
 
-- ✅ Sprawdzi kod ESLintem
-- ✅ Sformatuje kod Prettierem
-- ✅ Zablokuje commit przy błędach
+- ✅ Checks code with ESLint
+- ✅ Formats code with Prettier
+- ✅ Blocks commit on errors
 
-### Rozwiązywanie problemów
+### Troubleshooting
 
 ```bash
-# Sprawdzenie wszystkich błędów
+# Check all errors
 npm run lint
 
-# Automatyczne naprawienie błędów
+# Auto fix errors
 npm run lint:fix
 
-# Formatowanie całego projektu
+# Format entire project
 npm run format
 
-# Sprawdzenie instalacji Playwright
+# Check Playwright installation
 npx playwright --version
 ```
 
-## 📊 Raportowanie
+## 📊 Reporting
 
-Playwright generuje automatyczne raporty HTML dostępne po uruchomieniu testów z flagą `--reporter=html`.
+Playwright generates automatic HTML reports available after running tests with `--reporter=html` flag.
 
-## 🤝 Wkład w projekt
+## 🤝 Contributing
 
-1. Fork repozytorium
-2. Utwórz branch dla funkcjonalności (`git checkout -b feature/amazing-feature`)
-3. Commit zmiany (`git commit -m 'Add amazing feature'`)
-4. Push do brancha (`git push origin feature/amazing-feature`)
-5. Otwórz Pull Request
+**⚠️ MANDATORY: Read [`CODING_STANDARDS.md`](./CODING_STANDARDS.md) before contributing!**
+
+1. **Read** the coding standards document thoroughly
+2. **Follow** all established patterns and conventions
+3. **Use** TypeScript path aliases and established import patterns
+4. **Maintain** consistency with existing code structure
+5. **Test** your changes with `npm test`
+6. **Format** code with `npm run format`
+7. **Lint** code with `npm run lint:fix`
+
+### Contribution Process
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. **Follow** coding standards from `CODING_STANDARDS.md`
+4. Write tests following established patterns
+5. Commit changes using simple commit messages (`git commit -m 'feat: add amazing feature'`)
+6. Push to branch (`git push origin feature/amazing-feature`)
+7. Open Pull Request
+
+### Key Files for Contributors
+
+- 📋 [`CODING_STANDARDS.md`](./CODING_STANDARDS.md) - **PRIMARY REFERENCE**
+- 🤖 [`.copilot-instructions.md`](./.copilot-instructions.md) - AI Assistant guidelines
+- ⚙️ [`tsconfig.json`](./tsconfig.json) - TypeScript path mapping configuration
 
 ---
 
-**Autor**: Twoje Imię  
-**Licencja**: ISC  
-**Wersja**: 1.0.0
+**Author**: Your Name  
+**License**: ISC  
+**Version**: 1.0.0
