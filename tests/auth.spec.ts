@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
-import { test } from '../fixtures/pages';
-import { generateTestUser } from '../utils/test-helpers';
-import { ValidationConstants } from '../constants/validation';
+import { test } from '@fixtures/pages.js';
+import { generateTestUser } from '@utils/test-helpers.js';
+import { ValidationConstants } from '@constants/validation.js';
 
 test.describe('Authentication Module', () => {
   test.describe.serial('Positive Authentication Flow', () => {

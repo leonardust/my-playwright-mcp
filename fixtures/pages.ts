@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test';
-import { RegisterPage } from '../pages/register.page';
-import { LoginPage } from '../pages/login.page';
-import { WelcomePage } from '../pages/welcome.page';
+import { RegisterPage } from '@pages/register.page.js';
+import { LoginPage } from '@pages/login.page.js';
+import { WelcomePage } from '@pages/welcome.page.js';
 
 type Pages = {
   registerPage: RegisterPage;

@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
-import { endpoints } from '../config/urls';
-import { BasePage } from './base.page';
+import { endpoints } from '@config/urls.js';
+import { BasePage } from '@pages/base.page.js';
 
 export class LoginPage extends BasePage {
   private readonly email: Locator;

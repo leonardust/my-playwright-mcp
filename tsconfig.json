@@ -11,7 +11,12 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "*": ["*"]
+      "@/*": ["./*"],
+      "@pages/*": ["./pages/*"],
+      "@utils/*": ["./utils/*"],
+      "@config/*": ["./config/*"],
+      "@constants/*": ["./constants/*"],
+      "@fixtures/*": ["./fixtures/*"]
     }
   },
   "include": ["**/*.ts"],

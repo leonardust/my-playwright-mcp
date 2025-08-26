@@ -1,4 +1,4 @@
-import { TestUser } from './test-types';
+import { TestUser } from '@utils/test-types.js';
 
 export const randomString = (length: number): string => {
   const chars = 'abcdefghijklmnopqrstuvwxyz';
