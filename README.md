@@ -262,6 +262,20 @@ npx lint-staged
 - Używaj **type-safe selektorów**
 - Dodawaj **komentarze** do skomplikowanej logiki
 
+### Git Conventions
+
+**Zasada projektu:** Preferujemy proste, zwięzłe commit messages
+
+```bash
+# ✅ Preferowane
+feat: add Faker.js for test data generation
+fix: resolve login validation issue
+test: add email format validation
+
+# ❌ Unikaj
+feat(test-data): implement comprehensive Faker.js library...
+```
+
 ### Przed commitem
 
 Hook pre-commit automatycznie:

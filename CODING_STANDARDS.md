@@ -860,15 +860,24 @@ async function waitForElement(selector: string, timeout = 5000): Promise<void> {
 
 ### Commit Messages
 
-Format: `type(scope): description`
+#### Zasada projektu: Preferujemy proste, zwięzłe commit messages
+
+Format: `type: brief description`
 
 ```bash
-# ✅ Poprawne commit messages
+# ✅ Preferowane w tym projekcie - proste i zwięzłe
+feat: add Faker.js for test data generation
+fix: resolve login validation issue
+test: add email format validation
+docs: update README with Faker.js info
+refactor: simplify test helpers
+
+# ✅ Opcjonalnie z scope (jeśli potrzebne)
 feat(auth): add password reset functionality
 fix(login): resolve session timeout issue
-test(registration): add email validation tests
-docs(readme): update installation instructions
-refactor(pages): extract common selectors to base class
+
+# ❌ Unikaj zbyt szczegółowych commitów
+feat(test-data): implement Faker.js library for realistic test data generation with firstName, lastName and email fields replacing previous randomString and uniqueEmail functions while maintaining backward compatibility and updating all related documentation
 
 # ❌ Niepoprawne commit messages
 fix login
