@@ -1,12 +1,12 @@
-import { Locator, Page } from '@playwright/test';
 import { endpoints } from '@config/urls.js';
 import { BasePage } from '@pages/base.page.js';
+import { Locator, Page } from '@playwright/test';
 
 export class WelcomePage extends BasePage {
   private readonly menu: Locator;
 
   constructor(page: Page) {
-    super(page);
+    super(page, 'WelcomePage');
     this.menu = page.getByRole('heading', { level: 1 });
   }
 
