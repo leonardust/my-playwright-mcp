@@ -37,7 +37,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@playwright/mcp": "^0.0.35",
+    "@playwright/mcp": "^0.0.41",
     "@playwright/test": "^1.55.0"
   },
   "devDependencies": {
