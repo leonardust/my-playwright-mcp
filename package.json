@@ -28,10 +28,10 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "prepare": "husky",
     "app:start": "cd ../gad-gui-api-demo && npm start",
-    "app:start:background": "cd ../gad-gui-api-demo && start npm start",
-    "app:stop": "taskkill /f /im node.exe /t 2>nul || echo 'No Node.js processes to kill'",
-    "dev": "npm run app:start:background && timeout 5 && npm run test",
-    "dev:ui": "npm run app:start:background && timeout 5 && npm run test:ui"
+    "app:start:background": "cd ../gad-gui-api-demo && start \"\" /B npm start",
+    "app:stop": "npx kill-port 3000 || echo 'No process on port 3000'",
+    "dev": "npm run app:start:background && npx wait-on http://localhost:3000 && npm run test && npm run app:stop",
+    "dev:ui": "npm run app:start:background && npx wait-on http://localhost:3000 && npm run test:ui && npm run app:stop"
   },
   "keywords": [],
   "author": "",
@@ -51,8 +51,10 @@
     "eslint-plugin-playwright": "^2.2.2",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
+    "kill-port": "^2.0.1",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
+    "wait-on": "^9.0.4",
     "winston": "^3.17.0"
   },
   "lint-staged": {
