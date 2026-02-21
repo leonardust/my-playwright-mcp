@@ -1,9 +1,9 @@
 name: Deploy Test Reports
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ['CI - Tests & Quality']
+    types: [completed]
 
 permissions:
   contents: read
@@ -16,53 +16,15 @@ concurrency:
 
 jobs:
   build-and-test:
-    name: Generate Test Reports
+    name: Prepare Test Reports
     runs-on: ubuntu-latest
-    env:
-      CI: true
-    services:
-      gad:
-        image: jaktestowac/gad:latest
-        ports:
-          - 3000:3000
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Download test reports artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Get installed Playwright version
-        id: playwright-version
-        run: |
-          echo "PLAYWRIGHT_VERSION=$(npx playwright --version)" >> $GITHUB_ENV
-
-      - name: Cache Playwright binaries
-        uses: actions/cache@v5
-        id: playwright-cache
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Wait for GAD service
-        run: |
-          timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done'
-
-      - name: Run Playwright tests with HTML report
-        run: npm run test:report
-        continue-on-error: true
+          name: playwright-artifacts
+          path: './'
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
