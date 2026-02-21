@@ -1,7 +1,9 @@
-name: CI - Tests & Quality
+name: CI - Quality, Test & Deploy Report
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 on:
   push:
@@ -10,14 +12,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
   quality-check:
-    name: Code Quality
+    name: Code Quality (eslint & prettier)
     runs-on: ubuntu-latest
 
     steps:
@@ -122,7 +119,7 @@ jobs:
           path: './playwright-report'
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy report to GitHub Pages
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
