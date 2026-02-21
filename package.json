@@ -37,15 +37,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@playwright/mcp": "^0.0.35",
+    "@playwright/mcp": "^0.0.44",
     "@playwright/test": "^1.55.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
     "@faker-js/faker": "^10.0.0",
-    "@types/node": "^24.3.0",
+    "@types/node": "^24.9.1",
     "@typescript-eslint/eslint-plugin": "^8.41.0",
-    "@typescript-eslint/parser": "^8.41.0",
+    "@typescript-eslint/parser": "^8.46.2",
     "dotenv": "^17.2.1",
     "eslint": "^9.34.0",
     "eslint-plugin-playwright": "^2.2.2",
