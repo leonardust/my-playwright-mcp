@@ -1,7 +1,9 @@
 name: Auto-merge Dependabot PRs
+
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review, reopened]
+
 jobs:
   automerge:
     if: github.actor == 'dependabot[bot]'
@@ -10,32 +12,39 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - name: Wait for all required status checks
-        uses: marocchino/wait-for-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # Możesz ustawić stricte jakie statusy czekać, ale domyślnie poczeka na wszystkie required
-      - name: Auto-merge PR
+      - name: Wait until all status checks pass and auto-merge
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-            });
-            if (
-              pr.data.mergeable_state === 'clean' &&
-              pr.data.state === 'open'
-            ) {
-              await github.rest.pulls.merge({
+            // Max 60 prób, po 30 sekund przerwy (~30 minut)
+            const pr_number = context.payload.pull_request.number;
+            for (let attempt = 0; attempt < 60; attempt++) {
+              const { data: pr } = await github.rest.pulls.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                merge_method: 'squash',
+                pull_number: pr_number,
               });
-              console.log('PR automatycznie zmergowany!');
-            } else {
-              console.log('PR nie jest gotowy do merge.');
+              // Sprawdź status checków
+              const { data: combined } = await github.rest.repos.getCombinedStatusForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: pr.head.sha,
+              });
+              const allSuccess = combined.status === 'success';
+              if (pr.mergeable_state === 'clean' && pr.state === 'open' && allSuccess) {
+                await github.rest.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr_number,
+                  merge_method: 'squash',
+                });
+                console.log('PR automatycznie zmergowany');
+                return;
+              } else {
+                console.log(`Próba ${attempt + 1}: Mergeable: ${pr.mergeable_state}, Status checks: ${combined.status}`);
+                // Poczekaj 30 sekund, zanim spróbujesz ponownie
+                await new Promise(r => setTimeout(r, 30000));
+              }
             }
+            throw new Error('Nie udało się spełnić warunków do auto-merge (status checks/mergeable) w wymaganym czasie.');
