@@ -12,12 +12,16 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - name: Wait until all status checks pass and auto-merge
+      - name: Wait for required checks to pass and auto-merge
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Max 60 prób, po 30 sekund przerwy (~30 minut)
+            const requiredChecks = [
+              "CI - Quality, Test & Deploy Report / Code Quality (eslint & prettier) (pull_request)",
+              "CI - Quality, Test & Deploy Report / E2E Tests (pull_request)",
+              "GitGuardian Security Checks"
+            ];
             const pr_number = context.payload.pull_request.number;
             for (let attempt = 0; attempt < 60; attempt++) {
               const { data: pr } = await github.rest.pulls.get({
@@ -25,26 +29,34 @@ jobs:
                 repo: context.repo.repo,
                 pull_number: pr_number,
               });
-              // Sprawdź status checków
-              const { data: combined } = await github.rest.repos.getCombinedStatusForRef({
+              // Pobierz statusy checków
+              const { data: checksData } = await github.rest.checks.listForRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: pr.head.sha,
               });
-              const allSuccess = combined.status === 'success';
-              if (pr.mergeable_state === 'clean' && pr.state === 'open' && allSuccess) {
+              // Wydobądź aktualny status dla każdego required checka
+              const checkStatuses = requiredChecks.map(name => {
+                const check = checksData.check_runs.find(c => c.name === name);
+                return check && check.conclusion === 'success';
+              });
+
+              const allChecksPassed = checkStatuses.every(Boolean);
+              if (pr.state === 'open' &&
+                  (pr.mergeable_state === 'clean' || pr.mergeable_state === 'unstable') &&
+                  allChecksPassed
+              ) {
                 await github.rest.pulls.merge({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   pull_number: pr_number,
                   merge_method: 'squash',
                 });
-                console.log('PR automatycznie zmergowany');
+                console.log('PR automatycznie zmergowany!');
                 return;
               } else {
-                console.log(`Próba ${attempt + 1}: Mergeable: ${pr.mergeable_state}, Status checks: ${combined.status}`);
-                // Poczekaj 30 sekund, zanim spróbujesz ponownie
+                console.log(`Próba ${attempt + 1}. Statusy checków:`, checkStatuses);
                 await new Promise(r => setTimeout(r, 30000));
               }
             }
-            throw new Error('Nie udało się spełnić warunków do auto-merge (status checks/mergeable) w wymaganym czasie.');
+            throw new Error('Nie udało się spełnić warunków auto-merge w wymaganym czasie.');
