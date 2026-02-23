@@ -1,0 +1,42 @@
+name: Auto-merge Dependabot PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+jobs:
+  automerge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: Wait for all required status checks
+        uses: ahmadnassri/action-wait-for-status@v1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Auto-merge PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            if (
+              pr.data.mergeable_state === 'clean' &&
+              pr.data.state === 'open'
+            ) {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                merge_method: 'squash',
+              });
+              console.log('PR automatycznie zmergowany!');
+            } else {
+              console.log('PR nie jest gotowy do merge.');
+            }
