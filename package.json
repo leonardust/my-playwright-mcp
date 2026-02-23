@@ -55,7 +55,7 @@
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "wait-on": "^9.0.4",
-    "winston": "^3.17.0"
+    "winston": "^3.19.0"
   },
   "overrides": {
     "minimatch": "10.2.1"
