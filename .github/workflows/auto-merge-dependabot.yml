@@ -18,9 +18,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const requiredChecks = [
+              "GitGuardian Security Checks",
               "Code Quality (eslint & prettier)",
-              "E2E Tests",
-              "GitGuardian Security Checks"
+              "E2E Tests"
             ];
             const pr_number = context.payload.pull_request.number;
             for (let attempt = 0; attempt < 60; attempt++) {
@@ -35,7 +35,7 @@ jobs:
                 ref: pr.head.sha,
               });
 
-              // Pretty logging
+              // Pretty logging, order from requiredChecks is preserved
               let prettyLog = [];
               const checkStatuses = requiredChecks.map(name => {
                 const check = checksData.check_runs.find(c => c.name === name);
@@ -54,7 +54,7 @@ jobs:
                 prettyLog.push({ name, result });
                 return check && check.conclusion === 'success';
               });
-              // Print table with check statuses
+              // Print table with check statuses in the specified order
               console.log('==== REQUIRED CHECKS STATUS ====');
               prettyLog.forEach(entry => {
                 console.log(`- ${entry.name}: ${entry.result}`);
