@@ -1,9 +1,7 @@
 name: Auto-merge Dependabot PRs
-
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review, reopened]
-
 jobs:
   automerge:
     if: github.actor == 'dependabot[bot]'
@@ -13,9 +11,10 @@ jobs:
       contents: write
     steps:
       - name: Wait for all required status checks
-        uses: ahmadnassri/action-wait-for-status@v1
+        uses: marocchino/wait-for-check@v1
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Możesz ustawić stricte jakie statusy czekać, ale domyślnie poczeka na wszystkie required
       - name: Auto-merge PR
         uses: actions/github-script@v7
         with:
