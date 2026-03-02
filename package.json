@@ -52,7 +52,7 @@
     "globals": "^17.3.0",
     "husky": "^9.1.7",
     "kill-port": "^2.0.1",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^16.3.1",
     "prettier": "^3.8.1",
     "wait-on": "^9.0.4",
     "winston": "^3.19.0"
