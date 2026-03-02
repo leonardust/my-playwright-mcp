@@ -13,7 +13,7 @@ jobs:
       contents: write
     steps:
       - name: Wait for required checks to pass and auto-merge
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
