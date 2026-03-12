@@ -58,7 +58,7 @@
     "winston": "^3.17.0"
   },
   "overrides": {
-    "minimatch": "10.2.1"
+    "minimatch": "^10.2.3"
   },
   "lint-staged": {
     "*.{ts,js}": [
