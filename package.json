@@ -53,7 +53,7 @@
     "husky": "^9.1.7",
     "kill-port": "^2.0.1",
     "lint-staged": "^17.0.8",
-    "prettier": "^3.8.4",
+    "prettier": "^3.9.1",
     "wait-on": "^9.0.10",
     "winston": "^3.19.0"
   },
