@@ -46,7 +46,7 @@
     "@types/node": "^26.6.6",
     "@typescript-eslint/eslint-plugin": "^8.72.2",
     "@typescript-eslint/parser": "^8.72.1",
-    "dotenv": "^18.0.9",
+    "dotenv": "^18.0.10",
     "eslint": "^10.14.0",
     "eslint-plugin-playwright": "^2.12.2",
     "globals": "^17.14.0",
