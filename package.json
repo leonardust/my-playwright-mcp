@@ -45,7 +45,7 @@
     "@faker-js/faker": "^10.6.0",
     "@types/node": "^26.6.6",
     "@typescript-eslint/eslint-plugin": "^8.72.2",
-    "@typescript-eslint/parser": "^8.72.1",
+    "@typescript-eslint/parser": "^8.73.0",
     "dotenv": "^18.0.10",
     "eslint": "^10.14.0",
     "eslint-plugin-playwright": "^2.12.2",
