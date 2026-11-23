@@ -38,7 +38,7 @@
   "license": "ISC",
   "dependencies": {
     "@playwright/mcp": "^0.0.86",
-    "@playwright/test": "^1.65.0"
+    "@playwright/test": "^1.65.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
